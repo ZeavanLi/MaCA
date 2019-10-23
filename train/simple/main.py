@@ -15,7 +15,7 @@ import numpy as np
 from agent.fix_rule_no_att.agent import Agent
 from interface import Environment
 from train.simple import dqn
-MAP_PATH = 'maps/1000_1000_fighter10v10.map'
+MAP_PATH = 'maps/1000_1000_fighter1v1.map'
 
 RENDER = True
 MAX_EPOCH = 1000
@@ -25,7 +25,7 @@ EPSILON = 0.9               # greedy policy
 GAMMA = 0.9                 # reward discount
 TARGET_REPLACE_ITER = 100   # target update frequency
 DETECTOR_NUM = 0
-FIGHTER_NUM = 10
+FIGHTER_NUM = 1
 COURSE_NUM = 16
 ATTACK_IND_NUM = (DETECTOR_NUM + FIGHTER_NUM) * 2 + 1 # long missile attack + short missile attack + no attack
 ACTION_NUM = COURSE_NUM * ATTACK_IND_NUM
