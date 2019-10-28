@@ -46,8 +46,14 @@ class NetFighter(nn.Module):
         img_feature = self.conv1(img)
         img_feature = self.conv2(img_feature)
         info_feature = self.info_fc(info)
+        print(img_feature.shape)
+        print(info_feature.shape)
         combined = torch.cat((img_feature.view(img_feature.size(0), -1), info_feature.view(info_feature.size(0), -1)),
                              dim=1)
+        print(img_feature.view(img_feature.size(0), -1).shape)
+        print(info_feature.view(info_feature.size(0),-1).shape)
+        print('-----------------')
+        print(combined.shape)
         feature = self.feature_fc(combined)
         action = self.decision_fc(feature)
         return action
@@ -158,12 +164,17 @@ class RLFighter:
             s__info_mem = s__info_mem.cuda()
 
         # sample batch memory from all memory
-
+        
+        print(a_mem)
         # q_eval w.r.t the action in experience
         q_eval = self.eval_net(s_screen_mem, s_info_mem).gather(1, a_mem)  # shape (batch, 1)
         q_next = self.target_net(s__screen_mem, s__info_mem).detach()  # detach from graph, don't backpropagate
         q_target = r_mem + self.gamma * q_next.max(1)[0].view(self.memory_counter, 1)  # shape (batch, 1)
         loss = self.loss_func(q_eval, q_target)
+        
+        print('==============================================')
+        print(q_eval.shape)
+        print(q_target.shape)
 
         self.optimizer.zero_grad()
         loss.backward()
@@ -210,8 +221,11 @@ class NetDetector(nn.Module):
         img_feature = self.conv1(img)
         img_feature = self.conv2(img_feature)
         info_feature = self.info_fc(info)
+        print(img_feature.size(0))
+        print(info_feature.size(0))
         combined = torch.cat((img_feature.view(img_feature.size(0), -1), info_feature.view(info_feature.size(0), -1)),
                              dim=1)
+
         feature = self.feature_fc(combined)
         action = self.decision_fc(feature)
         return action
